@@ -6,7 +6,7 @@ export interface GridCell {
   lastFortifiedBy?: string;
   lastAttackedBy?: string;
   lastCapturedBy?: string;
-  structure?: 'factory' | 'castle' | null;
+  structure?: 'factory' | 'castle' | 'spawn' | null;
 }
 
 export interface PlayerState {

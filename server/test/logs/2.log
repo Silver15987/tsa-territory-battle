@@ -1,0 +1,411 @@
+
+1. Attack non-adjacent cell (should fail)
+Result: PASS - No AP lost, no capture
+Player: {"id":"test","faction":"red","ap":30,"actionQueue":[]}
+Faction: {"name":"red","apPool":320,"upgrades":{"factory":3,"castle":0}}
+Grid: [
+  [
+    {
+      "x": 0,
+      "y": 0,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ]
+]
+
+2. Attack adjacent cell (should succeed)
+Result: PASS - AP lost, cell captured
+Player: {"id":"test","faction":"red","ap":20,"actionQueue":[]}
+Faction: {"name":"red","apPool":320,"upgrades":{"factory":3,"castle":0}}
+Grid: [
+  [
+    {
+      "x": 0,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 0,
+      "lastCapturedBy": "test"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ]
+]
+
+3. Fortify owned cell (should succeed)
+Result: PASS - AP lost, fortification up
+Player: {"id":"test","faction":"red","ap":15,"actionQueue":[]}
+Faction: {"name":"red","apPool":320,"upgrades":{"factory":3,"castle":0}}
+Grid: [
+  [
+    {
+      "x": 0,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1,
+      "lastCapturedBy": "test",
+      "lastFortifiedBy": "test"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ]
+]
+
+4. Fortify unowned cell (should fail)
+Result: PASS - No AP lost, no change
+Player: {"id":"test","faction":"red","ap":15,"actionQueue":[]}
+Faction: {"name":"red","apPool":320,"upgrades":{"factory":3,"castle":0}}
+Grid: [
+  [
+    {
+      "x": 0,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1,
+      "lastCapturedBy": "test",
+      "lastFortifiedBy": "test"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ]
+]
+
+5. Donate AP to faction
+Result: FAIL - AP not moved correctly
+Player: {"id":"test","faction":"red","ap":5,"actionQueue":[]}
+Faction: {"name":"red","apPool":320,"upgrades":{"factory":3,"castle":0}}
+Grid: [
+  [
+    {
+      "x": 0,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1,
+      "lastCapturedBy": "test",
+      "lastFortifiedBy": "test"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ]
+]
+
+6. Request upgrade
+Result: FAIL - Upgrade not processed
+Player: {"id":"test","faction":"red","ap":5,"actionQueue":[]}
+Faction: {"name":"red","apPool":230,"upgrades":{"factory":4,"castle":0}}
+Grid: [
+  [
+    {
+      "x": 0,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1,
+      "lastCapturedBy": "test",
+      "lastFortifiedBy": "test"
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "ownerFaction": "red",
+      "fortificationLevel": 1
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ],
+  [
+    {
+      "x": 0,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 1,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "ownerFaction": null,
+      "fortificationLevel": 0
+    }
+  ]
+]
