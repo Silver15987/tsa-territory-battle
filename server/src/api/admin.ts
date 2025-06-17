@@ -7,36 +7,90 @@ export function registerAdminEndpoints(app: any) {
   // Reset test data endpoint
   router.post('/admin/reset', async (_req: Request, res: Response) => {
     // Clear all test keys
-    await redisClient.del('player:test', 'faction:red', 'grid', 'player:test:actions');
-    // Seed test player
-    await redisClient.hmset('player:test', {
-      id: 'test',
+    await redisClient.del(
+      'player:test1', 'player:test2', 'player:test3', 
+      'faction:red', 'faction:blue', 'faction:green', 
+      'grid',
+      'player:test1:actions', 'player:test2:actions', 'player:test3:actions'
+    );
+    
+    // Seed test players for different factions
+    await redisClient.hmset('player:test1', {
+      id: 'test1',
       faction: 'red',
       ap: '100',
       actionQueue: JSON.stringify([]),
     });
-    // Seed test faction
+    
+    await redisClient.hmset('player:test2', {
+      id: 'test2',
+      faction: 'blue',
+      ap: '100',
+      actionQueue: JSON.stringify([]),
+    });
+    
+    await redisClient.hmset('player:test3', {
+      id: 'test3',
+      faction: 'red', // Second red player
+      ap: '100',
+      actionQueue: JSON.stringify([]),
+    });
+    
+    // Seed test factions
     await redisClient.hmset('faction:red', {
       name: 'red',
       apPool: '500',
       upgrades: JSON.stringify({ factory: 1, castle: 0 }),
     });
-    // Seed a simple 3x3 grid
+    
+    await redisClient.hmset('faction:blue', {
+      name: 'blue',
+      apPool: '500',
+      upgrades: JSON.stringify({ factory: 1, castle: 0 }),
+    });
+    
+    await redisClient.hmset('faction:green', {
+      name: 'green',
+      apPool: '500',
+      upgrades: JSON.stringify({ factory: 1, castle: 0 }),
+    });
+    
+    // Seed a larger 5x5 grid with initial faction territories
     const grid = [
       [
-        { x: 0, y: 0, ownerFaction: null, fortificationLevel: 0 },
+        { x: 0, y: 0, ownerFaction: 'red', fortificationLevel: 1 },
         { x: 1, y: 0, ownerFaction: 'red', fortificationLevel: 1 },
         { x: 2, y: 0, ownerFaction: null, fortificationLevel: 0 },
+        { x: 3, y: 0, ownerFaction: 'blue', fortificationLevel: 1 },
+        { x: 4, y: 0, ownerFaction: 'blue', fortificationLevel: 1 },
       ],
       [
-        { x: 0, y: 1, ownerFaction: null, fortificationLevel: 0 },
+        { x: 0, y: 1, ownerFaction: 'red', fortificationLevel: 0 },
         { x: 1, y: 1, ownerFaction: null, fortificationLevel: 0 },
         { x: 2, y: 1, ownerFaction: null, fortificationLevel: 0 },
+        { x: 3, y: 1, ownerFaction: null, fortificationLevel: 0 },
+        { x: 4, y: 1, ownerFaction: 'blue', fortificationLevel: 0 },
       ],
       [
         { x: 0, y: 2, ownerFaction: null, fortificationLevel: 0 },
         { x: 1, y: 2, ownerFaction: null, fortificationLevel: 0 },
         { x: 2, y: 2, ownerFaction: null, fortificationLevel: 0 },
+        { x: 3, y: 2, ownerFaction: null, fortificationLevel: 0 },
+        { x: 4, y: 2, ownerFaction: null, fortificationLevel: 0 },
+      ],
+      [
+        { x: 0, y: 3, ownerFaction: 'green', fortificationLevel: 0 },
+        { x: 1, y: 3, ownerFaction: null, fortificationLevel: 0 },
+        { x: 2, y: 3, ownerFaction: null, fortificationLevel: 0 },
+        { x: 3, y: 3, ownerFaction: null, fortificationLevel: 0 },
+        { x: 4, y: 3, ownerFaction: 'green', fortificationLevel: 0 },
+      ],
+      [
+        { x: 0, y: 4, ownerFaction: 'green', fortificationLevel: 1 },
+        { x: 1, y: 4, ownerFaction: 'green', fortificationLevel: 1 },
+        { x: 2, y: 4, ownerFaction: null, fortificationLevel: 0 },
+        { x: 3, y: 4, ownerFaction: 'green', fortificationLevel: 1 },
+        { x: 4, y: 4, ownerFaction: 'green', fortificationLevel: 1 },
       ],
     ];
     await redisClient.set('grid', JSON.stringify(grid));
@@ -86,6 +140,28 @@ export function registerAdminEndpoints(app: any) {
       res.json(parsed);
     } catch {
       res.status(500).json({ error: 'Failed to parse grid' });
+    }
+  });
+
+  // Create individual player endpoint
+  router.post('/admin/player', async (req: Request, res: Response) => {
+    const { id, faction, ap } = req.body;
+    
+    if (!id || !faction || typeof ap !== 'number') {
+      return res.status(400).json({ error: 'Missing required fields: id, faction, ap' });
+    }
+    
+    try {
+      await redisClient.hmset(`player:${id}`, {
+        id,
+        faction,
+        ap: ap.toString(),
+        actionQueue: JSON.stringify([]),
+      });
+      
+      res.json({ ok: true, player: { id, faction, ap } });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to create player' });
     }
   });
 
