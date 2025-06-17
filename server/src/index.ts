@@ -59,7 +59,9 @@ Promise.all([
     log('All services connected.');
     startGameLoop();
     server.listen(PORT, () => {
-      log(`Server listening on port ${PORT}`);
+      log(`🚀 Server running on port ${PORT}`);
+      log(`📡 WebSocket server ready for connections`);
+      log(`🌐 Accessible at: http://0.0.0.0:${PORT}`);
     });
   })
   .catch((err) => {
