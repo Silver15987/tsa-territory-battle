@@ -11,9 +11,34 @@ import { registerAdminEndpoints } from './api/admin';
 import { startGameLoop, setSocketIO } from './gameLoop';
 import { log, error } from './utils/logger';
 import cors from 'cors';
+import session from 'express-session';
+import passport from 'passport';
+import authRouter from './api/auth';
 
 const app = express();
-app.use(cors());
+
+// Configure CORS to allow credentials
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+}));
+
+// Configure session middleware at app level
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'supersecret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false, // Set to true in production with HTTPS
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// Initialize passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 const server = http.createServer(app);
 const io = new SocketIOServer(server, { cors: { origin: '*' } });
 setSocketIO(io);
@@ -25,6 +50,7 @@ app.use(express.json());
 
 registerAdminEndpoints(app);
 registerWebSocketHandlers(io);
+app.use('/auth', authRouter);
 
 Promise.all([
   mongoClient.connect()
