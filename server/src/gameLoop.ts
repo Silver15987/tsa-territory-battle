@@ -4,7 +4,7 @@ import { log } from './utils/logger';
 import { PlayerAction, GridCell, PlayerState, FactionState } from './utils/types';
 import { Server as SocketIOServer } from 'socket.io';
 
-const TICK_INTERVAL = 1000; // 1 second
+const TICK_INTERVAL = 200; // 0.2 seconds
 const AP_COSTS = {
   attack: 10,
   fortify: 5,
@@ -250,6 +250,11 @@ export function startGameLoop() {
             await setFaction(faction);
             // Save player state immediately after each valid action
             await setPlayer(player);
+            // Emit real-time updates for player and faction
+            if (io) {
+              io.emit('playerUpdate', player);
+              io.emit('factionUpdate', faction);
+            }
           }
         } catch (e) {
           log('Failed to parse action:', actionStr, e);
@@ -283,7 +288,7 @@ export function startGameLoop() {
     if (gridChanged) {
       await setGrid(grid);
       if (io) {
-        io.emit('map_diff', { grid });
+        io.emit('gridUpdate', grid);
       }
     }
   }, TICK_INTERVAL);

@@ -10,8 +10,10 @@ import { registerWebSocketHandlers } from './api/websocket';
 import { registerAdminEndpoints } from './api/admin';
 import { startGameLoop, setSocketIO } from './gameLoop';
 import { log, error } from './utils/logger';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 const server = http.createServer(app);
 const io = new SocketIOServer(server, { cors: { origin: '*' } });
 setSocketIO(io);
